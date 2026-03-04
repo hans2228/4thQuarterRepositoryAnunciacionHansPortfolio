@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<style>
+    body {
+        margin: 0;
+        font-family: 'Segoe UI', sans-serif;
+        background: linear-gradient(135deg, #0f0f0f, #1a1a1a, #000000);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        color: white;
+    }
+
+    .container {
+        width: 420px;
+        background: linear-gradient(145deg, #1c1c1c, #111111);
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 
+            0 0 20px rgba(109, 3, 248, 0.747),
+            0 10px 30px rgba(0, 0, 0, 0.6);
+        border: 1px solid #2c2c2c;
+    }
+
+    h2 {
+        text-align: center;
+        color: #4300e0;
+        margin-bottom: 25px;
+        letter-spacing: 1px;
+    }
+
+    h3 {
+        margin-top: 35px;
+        border-bottom: 1px solid #2c2c2c;
+        padding-bottom: 5px;
+        color: #ccc;
+    }
+
+    input, select {
+        width: 100%;
+        padding: 10px;
+        margin-top: 6px;
+        margin-bottom: 15px;
+        border-radius: 8px;
+        border: 1px solid #2c2c2c;
+        background-color: #141414;
+        color: white;
+        outline: none;
+        transition: 0.2s;
+    }
+
+    input:focus, select:focus {
+        border-color: #e0008a9a;
+        box-shadow: 0 0 6px rgba(224, 0, 86, 0.37);
+    }
+
+    button {
+        width: 100%;
+        padding: 10px;
+        background-color: #00e05673;
+        color: black;
+        font-weight: bold;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    button:hover {
+        background-color: #00c94c;
+        transform: scale(1.03);
+    }
+
+    .stars span {
+        font-size: 28px;
+        cursor: pointer;
+        color: #444;
+        transition: 0.2s;
+    }
+
+    .stars span:hover {
+        transform: scale(1.2);
+    }
+
+    .stars .active {
+        color: #e09200;
+    }
+
+    .movie-item {
+        background: linear-gradient(145deg, #181818, #101010);
+        padding: 12px;
+        border-radius: 10px;
+        margin-top: 12px;
+        border: 1px solid #2c2c2c;
+        transition: 0.2s;
+    }
+
+    .movie-item:hover {
+        border-color: #e0a400;
+        box-shadow: 0 0 10px rgba(224, 108, 0, 0.575);
+    }
+
+    .movie-title {
+        font-weight: bold;
+        font-size: 15px;
+    }
+
+    .movie-meta {
+        font-size: 12px;
+        color: #aaa;
+        margin-top: 3px;
+    }
+
+    .movie-rating {
+        margin-top: 6px;
+        color: #00e054;
+        font-size: 14px;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+    <h2>Add a Movie</h2>
+
+    <label>Title:</label><br>
+    <input type="text" id="title"><br><br>
+
+    <label>Year:</label><br>
+    <input type="number" id="year"><br><br>
+
+    <label>Genre:</label><br>
+    <select id="genre">
+        <option>Action</option>
+        <option>Comedy</option>
+        <option>Drama</option>
+        <option>Sci-Fi</option>
+        <option>Horror</option>
+    </select><br><br>
+
+    <label>Rating:</label>
+    <div class="stars" id="stars">
+        <span data-value="1">★</span>
+        <span data-value="2">★</span>
+        <span data-value="3">★</span>
+        <span data-value="4">★</span>
+        <span data-value="5">★</span>
+    </div>
+
+    <button onclick="addMovie()">Add Movie</button>
+
+    <h3>Movie List</h3>
+    <div id="movieList"></div>
+
+</div>
+
+<script>
+
+let currentRating = 0;
+
+const stars = document.querySelectorAll("#stars span");
+
+stars.forEach(star => {
+    star.addEventListener("click", function() {
+        currentRating = this.getAttribute("data-value");
+        updateStars();
+    });
+});
+
+function updateStars() {
+    stars.forEach(star => {
+        if (star.getAttribute("data-value") <= currentRating) {
+            star.classList.add("active");
+        } else {
+            star.classList.remove("active");
+        }
+    });
+}
+
+function addMovie() {
+
+    let title = document.getElementById("title").value;
+    let year = document.getElementById("year").value;
+    let genre = document.getElementById("genre").value;
+
+    if (title === "" || year === "" || currentRating === 0) {
+        alert("Please complete all fields.");
+        return;
+    }
+
+    let movie = {
+        title: title,
+        year: year,
+        genre: genre,
+        rating: currentRating
+    };
+
+    let movies = JSON.parse(localStorage.getItem("movies")) || [];
+
+    movies.push(movie);
+
+    localStorage.setItem("movies", JSON.stringify(movies));
+
+    displayMovies();
+
+    document.getElementById("title").value = "";
+    document.getElementById("year").value = "";
+    currentRating = 0;
+    updateStars();
+}
+
+function displayMovies() {
+
+    let movieList = document.getElementById("movieList");
+    movieList.innerHTML = "";
+
+    let movies = JSON.parse(localStorage.getItem("movies")) || [];
+
+    movies.forEach(movie => {
+
+        let starsDisplay = "";
+        for (let i = 0; i < movie.rating; i++) {
+            starsDisplay += "⭐";
+        }
+
+        movieList.innerHTML += `
+            <div class="movie-item">
+                ${movie.title} (${movie.year}) - ${movie.genre}, Rating: ${starsDisplay}
+            </div>
+        `;
+    });
+}
+
+displayMovies();
+
+</script>
+
+</body>
+</html>
