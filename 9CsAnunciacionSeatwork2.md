@@ -5,9 +5,17 @@ When scrolling through the page, it does not allow you to move it due to the "fi
 # 3 (Absolute): What is the effect of position: absolute on an element? How is it different from fixed?
 Comparing the two positions together, the fixed position is relative to the viewport, the absolute position is relative to the nearest ancestor.
 # 4 (Absolute): Why does the notice appear on top of the content? What happens if you swap the z‑index values?
-
+The notice appears on top of the content because it has a higher z-index compared to the content which is "z-index:1".
 # REFLECTION QUESTIONS
 # a. Could you summarize the differences between the CSS position values (static, relative, absolute, fixed)?
+Static: No position applied, no movement, default
+Relative: Moves from the original given position but stays in the flow
+Absolute: positioned from the nearest parent element, removed from the flow
+Fixed: fixed to the screen, removed from the flow
 # b. How does absolute positioning depend on its parent element?
+Absolute positioning depends on the nearest parent with a position, if there is none, it uses the entire page.
 # c. How do you differentiate sticky from fixed (you can research on sticky)?
+Fixed always stays on the same place on the screen, while sticky is like relative but becomes fixed when scrolling reaches a certain point in the page.
 # d. If you were designing a webpage for a school event, how might you use positioning to highlight important information? Please give concrete examples.
+A fixed header would be used for the title. A sticky navigation bar so that its a lot more easy access when scrolling. An absolute notice box used for announcements and promotions. The z-index could be used for pop-ups and ads as well.
+Examples: A "Join" fixed button at the bottom. A countdown timer would be implemented for when the event is set.
